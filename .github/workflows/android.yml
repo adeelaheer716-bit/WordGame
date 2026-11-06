@@ -12,8 +12,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout Repository
         uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
 
       - name: Setup Java
         uses: actions/setup-java@v4
@@ -21,7 +26,13 @@ jobs:
           distribution: temurin
           java-version: '21'
 
-      - name: Grant permission
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Sync Capacitor Android
+        run: npx cap sync android
+
+      - name: Grant Gradle Permission
         run: chmod +x android/gradlew
 
       - name: Build APK
@@ -33,4 +44,3 @@ jobs:
         with:
           name: WordGame-APK
           path: android/app/build/outputs/apk/debug/app-debug.apk
-          
